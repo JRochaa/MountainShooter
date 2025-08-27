@@ -34,6 +34,10 @@ MENU_OPTION = ('NEW GAME 1P',
                'SCORE',
                'EXIT')
 
+# T
+TIMEOUT_STEP = 100  # 100ms
+TIMEOUT_LEVEL = 20000  # 20s
+
 #W
 WIN_WIDTH = 576
 WIN_HEIGHT = 324
