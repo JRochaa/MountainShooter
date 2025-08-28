@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from code.Const import COLOR_WHITE, TIMEOUT_LEVEL, WIN_HEIGHT
+import random
+from code.Const import COLOR_WHITE, EVENT_ENEMY, MENU_OPTION, SPAWN_TIME, TIMEOUT_LEVEL, WIN_HEIGHT
 from code.EntityFactory import EntityFactory
 from code.Entity import Entity
 import pygame
@@ -16,9 +17,15 @@ class Level:
         self.name = name
         self.game_mode = game_mode
         self.entity_list: list[Entity] = []
-        self.entity_list.extend(EntityFactory.get_entity('Level1Bg'))
+        self.entity_list.extend(EntityFactory.get_entity('Level1Bg')) # type: ignore
+        self.entity_list.append(EntityFactory.get_entity('Player1')) # type: ignore
+        if game_mode in [MENU_OPTION[1], MENU_OPTION[2]]:
+            self.entity_list.append(EntityFactory.get_entity('Player2')) # type: ignore
+        pygame.time.set_timer(EVENT_ENEMY, SPAWN_TIME)
 
-    def run(self, ):
+
+
+    def run(self):
         pygame.mixer_music.load(f'./asset/{self.name}.mp3')
         pygame.mixer_music.play(-1)
         clock = pygame.time.Clock()
@@ -31,6 +38,9 @@ class Level:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()  
+                if event.type == EVENT_ENEMY:
+                    choice = random.choice(('Enemy1', 'Enemy2'))
+                    self.entity_list.append(EntityFactory.get_entity(choice)) # type: ignore
 
             #Printed Text
             self.level_text(14, f'{self.name} - Timeout: {self.timeout / 1000:.1f}s', COLOR_WHITE, (10, 5))
